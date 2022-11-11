@@ -1,17 +1,14 @@
 <?php
 
-require_once 'game.php';
-require_once 'element.php';
-require_once 'person.php';
+require_once 'Game.php';
+require_once 'Element.php';
+require_once 'Person.php';
 
 $rock = new Element("Rock");
 $paper = new Element('Paper');
 $scissors = new Element('Scissors');
 $lizard = new Element('Lizard');
 $spock = new Element('Spock');
-
-$playerA = new Person('Player');
-$playerB = new Person('PC');
 
 $rock->setBeats($scissors, $lizard);
 $paper->setBeats($rock, $spock);
@@ -29,25 +26,31 @@ $elements = [
 
 $opponentElement = $elements[array_rand($elements)];
 
-
 foreach ($elements as $key => $element) {
     echo "[{$key}] {$element->getName()}" . PHP_EOL;
 }
 
 $selection = (int)readline('Choose element: ');
+$input = $selection + 1;
 
-$playerA = $elements[$selection];
-$playerB = $elements[array_rand($elements)];
+var_dump($input);
+
+$playerSelection = $elements[$selection];
+$pcSelection = $elements[array_rand($elements)];
+
+$playerA = new Person('Player', $playerSelection);
+$playerB = new Person('PC', $pcSelection);
 
 $game = new Game($playerA, $playerB);
-$winner = $game->getWinner();
+$winner = $game->getWinner($playerA, $playerB);
 
-echo "{$playerA->getName()} VS {$playerB->getName()}";
+echo "{$playerSelection->getName()} VS {$pcSelection->getName()}";
 echo PHP_EOL;
 
 if ($winner === null) {
-    echo "The game is tie!";
+    echo "The game is tie!" . PHP_EOL;
     exit;
+} else {
+    echo "Winner: " . $winner->getName() . PHP_EOL;
 }
 
-echo "Winner: " . $playerA->getName() . PHP_EOL;
